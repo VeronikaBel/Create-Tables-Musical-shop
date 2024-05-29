@@ -22,17 +22,13 @@ insert into albums (id, album, release_date) values
 	(3, 'Gloria', '2023'),
 	(4, 'Эгоист', '2017');
 
-alter table tracks
-add durat integer not null check( durat >90) 
-
-alter table tracks 
-drop column duration;
-
 insert into tracks (id, album_id, durat, track_name) values
 	(1, 1, 232, 'Come to me'),
 	(2, 2, 222, 'Pray'),
 	(3, 2, 167, 'Like I can'),
-	(4, 2, 221, 'La La La');
+	(4, 2, 221, 'La La La'),
+	(7, 2, 201, 'All by myself'),
+	(6, 2, 199, 'It"s my life' );
 
 insert into singersalbums (singer_id, album_id) values
 	(1, 1),

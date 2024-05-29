@@ -1,5 +1,6 @@
 -- ЗАДАНИЕ 2
-select MAX (durat) from tracks;
+select track_name, durat from tracks
+where durat = (select MAX(durat) from tracks);
 
 select durat, track_name from tracks
 where durat >= 210;
@@ -11,8 +12,14 @@ select singer_name from singers
 where singer_name not like '% %';
 
 select track_name, album_id  from tracks 
-where track_name like '%моя%';
-
+where track_name ILIKE 'my %'
+OR track_name ILIKE '% my'
+OR track_name ILIKE '% my %'
+OR track_name ILIKE 'my'
+OR track_name ILIKE 'моя'
+OR track_name ILIKE 'моя %'
+OR track_name ILIKE '% моя'
+OR track_name ILIKE '% моя %';
 
 -- ЗАДАНИЕ 3
 
@@ -22,10 +29,9 @@ join singergenres sg on sg.genres_id = g.id
 group by g.genres;
 
 --количество треков, вошедших в альбомы 2019-2020 годов
-select album, COUNT (track_name) from albums a
-join tracks t on t.album_id = a.id 
-where release_date between 2019 and 2020
-group by album ;
+select COUNT (t.id) from tracks t
+join albums a on t.album_id = a.id 
+where release_date between 2019 and 2020;
 
 --средняя продолжительсть треков по каждому альбому
 select album_id, AVG (durat) from tracks t 
@@ -33,13 +39,17 @@ group by album_id
 order by AVG (durat);
 
 --все исполнители, которые не выпустили альбомы в 2020 году
-select singer_name, release_date from singers s
-join singersalbums sa on sa.singer_id = s.id
-join albums a on a.id = sa.album_id
-where release_date != 2020;
+SELECT singer_name FROM singers s
+WHERE singer_name NOT IN (SELECT singer_name FROM singers s
+ JOIN singersalbums sa ON s.id = sa.singer_id
+ JOIN albums a ON a.id = sa.album_id 
+ WHERE release_date = 2020);
 
 -- названия сборников в которых присутствует конкретный исполнитель
-select album, singer_name from albums a
-join singersalbums sa on a.id = sa.album_id 
-join singers s on sa.singer_id = s.id 
+select collection_name, singer_name from music_collections m
+join music_collectionstracks mtr on mtr.music_collection_id = m.id 
+join tracks tr on tr.id = mtr.track_id
+join albums a on a.id = tr.album_id
+join singersalbums sa on sa.album_id = a.id
+join singers s on s.id = sa.singer_id   
 where singer_name = 'Sam Smith';

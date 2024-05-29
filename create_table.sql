@@ -23,6 +23,7 @@ create table if not exists Albums (
 create table if not exists Tracks (
 	id SERIAL primary key,
 	album_id INTEGER not null references Albums(id),
+	track_name VARCHAR (50) not null,
 	duration TIME 
 );
 
@@ -44,6 +45,11 @@ create table if not exists Music_collectionsTracks (
 	constraint pk2 primary key (music_collection_id, track_id)
 );
 
+alter table tracks
+add durat integer not null check( durat >90); 
+
+alter table tracks 
+drop column duration;
 
 
 
